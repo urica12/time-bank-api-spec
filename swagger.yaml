@@ -3,16 +3,201 @@ info:
   title: Timebank
   description: Timebank API documentation
   version: '1.0'
-  contact: {}
-tags: []
-servers: []
+
+security:
+  - bearerAuth: []
+  
+paths:
+  /v1/system/ping:
+    get:
+      operationId: ping
+      summary: Replies with pong
+      description: Replies ping with pong
+      tags: 
+        - System
+      responses:
+        "200":
+          description: Pong
+          content:
+            text/plain:
+              schema:
+                type: string
+                
+  /v1/persons:
+    get:
+      operationId: getPersons
+      summary: Get list of Timebank persons.
+      description: Get list of Timebank persons.
+      tags: 
+        - Timebank
+      responses:
+        "200":
+          description: Get list of Timebank persons.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PersonData"
+        "default":
+          description: Invalid request was sent to the server.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/entries/{personId}:
+    get:
+      operationId: getPersonTimeEntries
+      summary: Find persons time entries.
+      description: Find persons time entries by personId.
+      tags:
+        - Timebank
+      parameters:
+        - name: personId
+          required: true
+          in: path
+          description: Timebank person unique ID
+          schema:
+            type: string
+            format: uuid
+        - name: before
+          required: false
+          in: query
+          description: Retrieve time entries before given date.
+          schema:
+            type: string
+        - name: after
+          required: false
+          in: query
+          description: Retrieve time entries after given date.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Persons time entries by personId
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeEntry'
+        "default":
+          description: Invalid request was sent to the server.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/sync:
+    post:
+      operationId: syncTimeFromForecast
+      summary: Synchronizes time entries from Forecast API.
+      description: Retrieves and synchronizes time entries from Forecast API.
+      tags:
+        - Timebank
+      parameters:
+        - name: before
+          required: false
+          in: query
+          description: Synchronizes before given date.
+          schema:
+            type: string
+        - name: after
+          required: false
+          in: query
+          description: Synchronizes after given date.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Synchronized time entries from Forecast API.
+          content:
+            text/plain:
+              schema:
+                type: string
+        "default":
+          description: Invalid request was sent to the server.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        
+  /v1/total/{personId}:
+    get:
+      operationId: getPersonTotal
+      summary: Find persons total time entries.
+      description: Find persons total time entries.
+      tags:
+        - Timebank
+      parameters:
+        - name: personId
+          required: true
+          in: path
+          schema:
+            type: string
+            format: uuid
+        - name: timespan
+          required: false
+          in: query
+          description: Default value is ALL_TIME.
+          schema:
+            $ref: "#/components/schemas/Timespan"
+      responses:
+        "200":
+          description: |-
+            When getting total from all the time,
+                              _id field will be null, otherwise it will be
+                              combination of year and month or year and week
+                              depending on timespan parameter
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimeEntryTotal"
+        "default":
+          description: Invalid request was sent to the server.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
-    PersonDto:
+    Error:
       type: object
+      description: Error object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+          
+    Timespan:
+      type: string
+      description: Enum for timespan
+      enum: 
+        - ALL TIME
+        - YEAR
+        - MONTH
+        - WEEK
+          
+    PersonData:
+      type: object
+      description: Person Data from Forecast API
       properties:
         id:
-          type: number
+          type: string
         first_name:
           type: string
         last_name:
@@ -83,8 +268,10 @@ components:
         - created_at
         - updated_at
         - start_date
+        
     TimeEntry:
       type: object
+      description: Person's time entries
       properties:
         externalId:
           type: string
@@ -112,8 +299,10 @@ components:
         - expected
         - total
         - date
-    TimeEntryTotalId:
+        
+    TimeEntryTotalSpan:
       type: object
+      description: Optional year/month/week number. Default is all time.
       properties:
         year:
           type: number
@@ -121,11 +310,13 @@ components:
           type: number
         week:
           type: number
-    TimeEntryTotalDto:
+          
+    TimeEntryTotal:
       type: object
+      description: Person's total time
       properties:
         _id:
-          $ref: '#/components/schemas/TimeEntryTotalId'
+          $ref: '#/components/schemas/TimeEntryTotalSpan'
         total:
           type: number
         logged:
@@ -142,116 +333,3 @@ components:
         - expected
         - internalTime
         - projectTime
-paths:
-  /timebank/persons:
-    get:
-      operationId: TimebankController_getPersons
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PersonDto'
-      tags:
-        - timebank
-  '/timebank/entries/{personId}':
-    get:
-      operationId: TimebankController_getEntries
-      parameters:
-        - name: personId
-          required: true
-          in: path
-          schema:
-            type: string
-        - name: before
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: after
-          required: false
-          in: query
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TimeEntry'
-      tags:
-        - timebank
-  /timebank/sync:
-    post:
-      operationId: TimebankController_syncWorkTime
-      parameters:
-        - name: before
-          required: false
-          in: query
-          schema:
-            type: string
-        - name: after
-          required: false
-          in: query
-          schema:
-            type: string
-      responses:
-        '200':
-          description: ''
-      tags:
-        - timebank
-  '/timebank/total/{personId}':
-    get:
-      operationId: TimebankController_getTotal
-      parameters:
-        - name: personId
-          required: true
-          in: path
-          schema:
-            type: string
-        - name: retention
-          required: false
-          in: query
-          description: Default value is ALL_TIME
-          schema:
-            enum:
-              - ALL_TIME
-              - YEAR
-              - MONTH
-              - WEEK
-            type: string
-      responses:
-        '200':
-          description: |-
-            When getting total from all the time,
-                              _id field will be null, otherwise it will be
-                              combination of year and month or year and week
-                              depending on retention parameter
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TimeEntryTotalDto'
-      tags:
-        - timebank
-  /system/ping:
-    get:
-      operationId: SystemController_getPersons
-      parameters: []
-      responses:
-        '200':
-          description: ''
-          content:
-            application/json:
-              schema:
-                type: string
-      tags:
-        - system
