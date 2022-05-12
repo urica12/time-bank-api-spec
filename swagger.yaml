@@ -25,7 +25,7 @@ paths:
                 
   /v1/persons:
     get:
-      operationId: getPersons
+      operationId: listPersons
       summary: Get list of Timebank persons.
       description: Get list of Timebank persons.
       tags: 
@@ -46,36 +46,37 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/entries/{personId}:
+  /v1/timeEntries:
     get:
-      operationId: getPersonTimeEntries
-      summary: Find persons time entries.
-      description: Find persons time entries by personId.
+      operationId: listEntries
+      summary: Lists time entries.
+      description: Lists time entries.
       tags:
-        - Timebank
+        - TimeEntries
       parameters:
         - name: personId
-          required: true
-          in: path
-          description: Timebank person unique ID
+          in: query
+          description: Filter by persons unique ID
           schema:
-            type: string
-            format: uuid
+            type: number
+            format: int32
         - name: before
           required: false
           in: query
           description: Retrieve time entries before given date.
           schema:
             type: string
+            format: date
         - name: after
           required: false
           in: query
           description: Retrieve time entries after given date.
           schema:
             type: string
+            format: date
       responses:
         "200":
-          description: Persons time entries by personId
+          description: List of time entries.
           content:
             application/json:
               schema:
@@ -89,9 +90,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/sync:
+  /v1/synchronize:
     post:
-      operationId: syncTimeFromForecast
+      operationId: synchronizeTimeEntries
       summary: Synchronizes time entries from Forecast API.
       description: Retrieves and synchronizes time entries from Forecast API.
       tags:
