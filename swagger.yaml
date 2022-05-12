@@ -30,6 +30,12 @@ paths:
       description: Get list of Timebank persons.
       tags: 
         - Persons
+      parameters:
+        - name: active
+          in: query
+          description: Filter by persons active state
+          schema:
+            type: boolean
       responses:
         "200":
           description: Get list of Timebank persons.
@@ -46,19 +52,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/timeEntries:
+  /v1/dailyEntries:
     get:
-      operationId: listEntries
-      summary: Lists time entries.
-      description: Lists time entries.
+      operationId: listDailyEntries
+      summary: Lists daily time entries.
+      description: Lists daily time entries.
       tags:
-        - TimeEntries
+        - DailyEntries
       parameters:
         - name: personId
           in: query
           description: Filter by persons unique ID
           schema:
-            type: number
+            type: integer
             format: int32
         - name: before
           required: false
@@ -82,7 +88,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TimeEntry'
+                  $ref: '#/components/schemas/DailyEntry'
         "default":
           description: Invalid request was sent to the server.
           content:
@@ -158,7 +164,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/TimeEntryTotal"
+                  $ref: "#/components/schemas/PersonTotalTime"
         "default":
           description: Invalid request was sent to the server.
           content:
@@ -167,11 +173,13 @@ paths:
                 $ref: "#/components/schemas/Error"
 
 components:
+
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
+      
   schemas:
     Error:
       type: object
@@ -242,41 +250,53 @@ components:
           type: string
           description: Persons user type.
         clientId:
-          type: number
+          type: integer
+          format: int32
           description: Persons client ID.
         holidayCalendarId:
-          type: number
+          type: integer
+          format: int32
           description: Persons holiday calendar ID.
         monday:
-          type: number
+          type: integer
+          format: int32
           description: Persons expected working hours in minutes.
         tuesday:
-          type: number
+          type: integer
+          format: int32
           description: Persons expected working hours in minutes.
         wednesday:
-          type: number
+          type: integer
+          format: int32
           description: Persons expected working hours in minutes.
         thursday:
-          type: number
+          type: integer
+          format: int32
           description: Persons expected working hours in minutes.
         friday:
-          type: number
+          type: integer
+          format: int32
           description: Persons expected working hours in minutes.
         saturday:
-          type: number
+          type: integer
+          format: int32
           description: Persons expected working hours in minutes.
         sunday:
-          type: number
+          type: integer
+          format: int32
           description: Persons expected working hours in minutes.
         active:
           type: boolean
           description: Defining is person active e.g. is employeed.
         defaultRole:
-          type: number
+          type: integer
+          format: int32
           description: ID of default role.
         cost:
           type: number
+          format: double
           description: Cost from the current cost period, decimal.
+          example: 1.1
         language:
           type: string
           description: Locale.
@@ -287,10 +307,12 @@ components:
           type: string
           description: End date of employment, String.
         createdBy:
-          type: number
+          type: integer
+          format: int32
           description: ID of user's creator.
         updatedBy:
-          type: number
+          type: integer
+          format: int32
           description: ID of user's updater.
         createdAt:
           type: string
@@ -300,10 +322,10 @@ components:
           type: string
           format: date-time
           description: User's end date, DateTime.
-        
-    TimeEntry:
+
+    DailyEntry:
       type: object
-      description: Person's time entries
+      description: Person's daily entry
       required:
         - id
         - person
@@ -317,67 +339,75 @@ components:
         id:
           type: string
           format: uuid
-          description: ID of TimeEntry, UUID
+          description: ID of DaylyEntry in UUID
         person:
-          type: number
+          type: integer
           format: int32
           description: Person ID in Forecast
         internalTime:
-          type: number
+          type: integer
+          format: int32
           description: Amount of internal time per time entry
         projectTime:
-          type: number
+          type: integer
+          format: int32
           description: Amount of project time per time entry
         logged:
-          type: number
+          type: integer
+          format: int32
           description: Amount of time logged per time entry
         expected:
-          type: number
+          type: integer
+          format: int32
           description: Amount of time expected per time entry
         total:
-          type: number
+          type: integer
+          format: int32
           description: Total amount of worktime per time entry
         date:
           type: string
           format: date-time
           description: Date of time entry
-        
-    TimeEntryTotalUnit:
-      type: object
-      description: Optional year/month/week number. Unit of duration of the total time entry. Default is all time.
-      properties:
-        year:
-          type: number
-        month:
-          type: number
-        week:
-          type: number
-          
-    TimeEntryTotal:
+
+    PersonTotalTime:
       type: object
       description: Person's total time
       required:
-        - total
+        - balance
         - logged
         - expected
         - internalTime
         - projectTime
       properties:
-        TimeEntryTotalUnit:
-          $ref: '#/components/schemas/TimeEntryTotalUnit'
-          description: Optional year/month/week number. Unit of duration of the total time entry. Default is all time.
-        total:
-          type: number
+        personId:
+          type: integer
+          format: int32
+        balance:
+          type: integer
+          format: int32
           description: Difference between expected and logged time.
         logged:
-          type: number
+          type: integer
+          format: int32
           description: Total amount logged time of person.
         expected:
-          type: number
+          type: integer
+          format: int32
           description: Total amount expected time of person.
         internalTime:
-          type: number
+          type: integer
+          format: int32
           description: Total amount of internal time of person.
         projectTime:
-          type: number
+          type: integer
+          format: int32
           description: Total amount of project time of person.
+        year:
+          type: integer
+          format: int32
+        monthNumber:
+          type: integer
+          format: int32
+        weekNumber:
+          type: integer
+          format: int32
