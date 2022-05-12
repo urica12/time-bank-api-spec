@@ -29,7 +29,7 @@ paths:
       summary: Get list of Timebank persons.
       description: Get list of Timebank persons.
       tags: 
-        - Timebank
+        - Persons
       responses:
         "200":
           description: Get list of Timebank persons.
@@ -38,7 +38,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/PersonData"
+                  $ref: "#/components/schemas/Person"
         "default":
           description: Invalid request was sent to the server.
           content:
@@ -95,7 +95,7 @@ paths:
       summary: Synchronizes time entries from Forecast API.
       description: Retrieves and synchronizes time entries from Forecast API.
       tags:
-        - Timebank
+        - Synchronize
       parameters:
         - name: before
           required: false
@@ -103,12 +103,14 @@ paths:
           description: Synchronizes before given date.
           schema:
             type: string
+            format: date
         - name: after
           required: false
           in: query
           description: Synchronizes after given date.
           schema:
             type: string
+            format: date
       responses:
         "200":
           description: Synchronized time entries from Forecast API.
@@ -123,13 +125,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
         
-  /v1/total/{personId}:
+  /v1/persons/{personId}/total:
     get:
-      operationId: getPersonTotal
-      summary: Find persons total time entries.
-      description: Find persons total time entries.
+      operationId: listPersonTotalTime
+      summary: Lists persons total time entries.
+      description: Lists persons total time entries.
       tags:
-        - Timebank
+        - Persons
       parameters:
         - name: personId
           required: true
@@ -180,8 +182,10 @@ components:
         code:
           type: integer
           format: int32
+          description: Error code
         message:
           type: string
+          description: Error message
           
     Timespan:
       type: string
@@ -192,66 +196,17 @@ components:
         - MONTH
         - WEEK
           
-    PersonData:
+    Person:
       type: object
       description: Person Data from Forecast API
-      properties:
-        id:
-          type: string
-        first_name:
-          type: string
-        last_name:
-          type: string
-        email:
-          type: string
-        user_type:
-          type: string
-        client_id:
-          type: number
-        holiday_calendar_id:
-          type: number
-        monday:
-          type: number
-        tuesday:
-          type: number
-        wednesday:
-          type: number
-        thursday:
-          type: number
-        friday:
-          type: number
-        saturday:
-          type: number
-        sunday:
-          type: number
-        active:
-          type: boolean
-        default_role:
-          type: number
-        cost:
-          type: number
-        language:
-          type: string
-        created_by:
-          type: number
-        updated_by:
-          type: number
-        created_at:
-          format: date-time
-          type: string
-        updated_at:
-          format: date-time
-          type: string
-        start_date:
-          type: string
       required:
         - id
-        - first_name
-        - last_name
+        - firstName
+        - lastName
         - email
-        - user_type
-        - client_id
-        - holiday_calendar_id
+        - userType
+        - clientId
+        - holidayCalendarId
         - monday
         - tuesday
         - wednesday
@@ -260,38 +215,96 @@ components:
         - saturday
         - sunday
         - active
-        - default_role
+        - defaultRole
         - cost
         - language
-        - created_by
-        - updated_by
-        - created_at
-        - updated_at
-        - start_date
+        - startDate
+        - createdBy
+        - updatedBy
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Person ID in Forecast.
+        firstName:
+          type: string
+          description: Person first name.
+        lastName:
+          type: string
+          description: Person last name.
+        email:
+          type: string
+          description: Person email.
+        userType:
+          type: string
+          description: Persons user type.
+        clientId:
+          type: number
+          description: Persons client ID.
+        holidayCalendarId:
+          type: number
+          description: Persons holiday calendar ID.
+        monday:
+          type: number
+          description: Persons expected working hours in minutes.
+        tuesday:
+          type: number
+          description: Persons expected working hours in minutes.
+        wednesday:
+          type: number
+          description: Persons expected working hours in minutes.
+        thursday:
+          type: number
+          description: Persons expected working hours in minutes.
+        friday:
+          type: number
+          description: Persons expected working hours in minutes.
+        saturday:
+          type: number
+          description: Persons expected working hours in minutes.
+        sunday:
+          type: number
+          description: Persons expected working hours in minutes.
+        active:
+          type: boolean
+          description: Defining is person active e.g. is employeed.
+        defaultRole:
+          type: number
+          description: ID of default role.
+        cost:
+          type: number
+          description: Cost from the current cost period, decimal.
+        language:
+          type: string
+          description: Locale.
+        startDate:
+          type: string
+          description: Start date of employment, String.
+        endDate:
+          type: string
+          description: End date of employment, String.
+        createdBy:
+          type: number
+          description: ID of user's creator.
+        updatedBy:
+          type: number
+          description: ID of user's updater.
+        createdAt:
+          type: string
+          format: date-time
+          description: User's start date, DateTime.
+        updatedAt:
+          type: string
+          format: date-time
+          description: User's end date, DateTime.
         
     TimeEntry:
       type: object
       description: Person's time entries
-      properties:
-        externalId:
-          type: string
-        person:
-          type: number
-        internalTime:
-          type: number
-        projectTime:
-          type: number
-        logged:
-          type: number
-        expected:
-          type: number
-        total:
-          type: number
-        date:
-          format: date-time
-          type: string
       required:
-        - externalId
+        - id
         - person
         - internalTime
         - projectTime
@@ -299,10 +312,38 @@ components:
         - expected
         - total
         - date
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of TimeEntry, UUID
+        person:
+          type: number
+          format: int32
+          description: Person ID in Forecast
+        internalTime:
+          type: number
+          description: Amount of internal time per time entry
+        projectTime:
+          type: number
+          description: Amount of project time per time entry
+        logged:
+          type: number
+          description: Amount of time logged per time entry
+        expected:
+          type: number
+          description: Amount of time expected per time entry
+        total:
+          type: number
+          description: Total amount of worktime per time entry
+        date:
+          type: string
+          format: date-time
+          description: Date of time entry
         
-    TimeEntryTotalSpan:
+    TimeEntryTotalUnit:
       type: object
-      description: Optional year/month/week number. Default is all time.
+      description: Optional year/month/week number. Unit of duration of the total time entry. Default is all time.
       properties:
         year:
           type: number
@@ -314,22 +355,28 @@ components:
     TimeEntryTotal:
       type: object
       description: Person's total time
-      properties:
-        _id:
-          $ref: '#/components/schemas/TimeEntryTotalSpan'
-        total:
-          type: number
-        logged:
-          type: number
-        expected:
-          type: number
-        internalTime:
-          type: number
-        projectTime:
-          type: number
       required:
         - total
         - logged
         - expected
         - internalTime
         - projectTime
+      properties:
+        TimeEntryTotalUnit:
+          $ref: '#/components/schemas/TimeEntryTotalUnit'
+          description: Optional year/month/week number. Unit of duration of the total time entry. Default is all time.
+        total:
+          type: number
+          description: Difference between expected and logged time.
+        logged:
+          type: number
+          description: Total amount logged time of person.
+        expected:
+          type: number
+          description: Total amount expected time of person.
+        internalTime:
+          type: number
+          description: Total amount of internal time of person.
+        projectTime:
+          type: number
+          description: Total amount of project time of person.
