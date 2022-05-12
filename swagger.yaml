@@ -144,8 +144,8 @@ paths:
           required: true
           in: path
           schema:
-            type: string
-            format: uuid
+            type: integer
+            format: int32
         - name: timespan
           required: false
           in: query
