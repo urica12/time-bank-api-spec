@@ -212,10 +212,6 @@ components:
         - id
         - firstName
         - lastName
-        - email
-        - userType
-        - clientId
-        - holidayCalendarId
         - monday
         - tuesday
         - wednesday
@@ -224,14 +220,7 @@ components:
         - saturday
         - sunday
         - active
-        - defaultRole
-        - cost
-        - language
         - startDate
-        - createdBy
-        - updatedBy
-        - createdAt
-        - updatedAt
       properties:
         id:
           type: integer
@@ -243,20 +232,6 @@ components:
         lastName:
           type: string
           description: Person last name.
-        email:
-          type: string
-          description: Person email.
-        userType:
-          type: string
-          description: Persons user type.
-        clientId:
-          type: integer
-          format: int32
-          description: Persons client ID.
-        holidayCalendarId:
-          type: integer
-          format: int32
-          description: Persons holiday calendar ID.
         monday:
           type: integer
           format: int32
@@ -292,54 +267,22 @@ components:
           type: integer
           format: int32
           description: ID of default role.
-        cost:
-          type: number
-          format: double
-          description: Cost from the current cost period, decimal.
-          example: 1.1
-        language:
-          type: string
-          description: Locale.
         startDate:
           type: string
           description: Start date of employment, String.
-        endDate:
-          type: string
-          description: End date of employment, String.
-        createdBy:
-          type: integer
-          format: int32
-          description: ID of user's creator.
-        updatedBy:
-          type: integer
-          format: int32
-          description: ID of user's updater.
-        createdAt:
-          type: string
-          format: date-time
-          description: User's start date, DateTime.
-        updatedAt:
-          type: string
-          format: date-time
-          description: User's end date, DateTime.
 
     DailyEntry:
       type: object
       description: Person's daily entry
       required:
-        - id
         - person
         - internalTime
         - projectTime
         - logged
         - expected
-        - total
+        - balance
         - date
       properties:
-        id:
-          type: string
-          format: uuid
-          description: ID of DaylyEntry in UUID
         person:
           type: integer
           format: int32
@@ -360,7 +303,7 @@ components:
           type: integer
           format: int32
           description: Amount of time expected per time entry
-        total:
+        balance:
           type: integer
           format: int32
           description: Total amount of worktime per time entry
@@ -411,3 +354,44 @@ components:
         weekNumber:
           type: integer
           format: int32
+
+    TimeEntry:
+      type: object
+      description: Person's single time entry
+      required:
+        - id
+        - person
+        - internalTime
+        - projectTime
+        - date
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of DailyEntry in UUID
+        person:
+          type: integer
+          format: int32
+          description: Person ID in Forecast
+        internalTime:
+          type: integer
+          format: int32
+          description: Amount of internal time per time entry
+        projectTime:
+          type: integer
+          format: int32
+          description: Amount of project time per time entry
+        date:
+          type: string
+          format: date
+          description: Date of time entry
+        createdAt:
+          type: string
+          format: date-time
+          description: Date time of time entry registration
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date time of time entry update
