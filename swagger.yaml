@@ -359,7 +359,8 @@ components:
       type: object
       description: Person's single time entry
       required:
-        - id
+        - entryId
+        - forecastId
         - person
         - internalTime
         - projectTime
@@ -371,6 +372,10 @@ components:
           type: string
           format: uuid
           description: ID of DailyEntry in UUID
+        forecastId:
+          type: integer
+          format: int32
+          description: TimeEntry ID in Forecast
         person:
           type: integer
           format: int32
