@@ -309,7 +309,7 @@ components:
           description: Total amount of worktime per time entry
         date:
           type: string
-          format: date-time
+          format: date
           description: Date of time entry
 
     PersonTotalTime:
