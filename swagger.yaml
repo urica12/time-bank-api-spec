@@ -122,7 +122,7 @@ paths:
         "200":
           description: Synchronized time entries from Forecast API.
           content:
-            text/plain:
+            application/json:
               schema:
                 type: string
         "default":
