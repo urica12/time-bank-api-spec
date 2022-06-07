@@ -345,15 +345,9 @@ components:
           type: integer
           format: int32
           description: Total amount of project time of person.
-        year:
-          type: integer
-          format: int32
-        monthNumber:
-          type: integer
-          format: int32
-        weekNumber:
-          type: integer
-          format: int32
+        timePeriod:
+          type: string
+          description: String identifying the relevant year/month/week for the requested period of time total.
 
     TimeEntry:
       type: object
