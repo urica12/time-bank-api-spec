@@ -228,6 +228,7 @@ components:
         - id
         - firstName
         - lastName
+        - email
         - monday
         - tuesday
         - wednesday
@@ -248,6 +249,9 @@ components:
         lastName:
           type: string
           description: Person last name.
+        email:
+          type: string
+          description: Person email.
         monday:
           type: integer
           format: int32
