@@ -95,6 +95,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  
+  /v1/timeEntries/{entryId}:
+    delete:
+      operationId: deleteTimeEntry
+      summary: Delete a time entry.
+      description: Deletes a time entry.
+      tags:
+        - TimeEntries
+      parameters:
+        - name: entryId
+          required: true
+          in: path
+          description: TimeEntry id
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Succes
+        "default":
+          description: Invalid request was sent to the server
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
   /v1/synchronize:
     post:
