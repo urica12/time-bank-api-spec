@@ -144,12 +144,14 @@ paths:
             type: string
             format: date
       responses:
-        "200":
+        "201":
           description: Synchronized time entries from Forecast API.
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SyncResponse"
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimeEntry"
         "default":
           description: Invalid request was sent to the server.
           content:
@@ -206,21 +208,6 @@ components:
       bearerFormat: JWT
       
   schemas:
-    SyncResponse:
-      type: object
-      description: SyncResponse object
-      required:
-        - code
-        - message
-      properties:
-        code:
-          type: integer
-          format: int32
-          description: SyncResponse code
-        message:
-          type: integer
-          format: int32
-          description: SyncResponse message
 
     Error:
       type: object
