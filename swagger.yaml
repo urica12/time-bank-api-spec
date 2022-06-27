@@ -392,7 +392,7 @@ components:
         - createdAt
         - updatedAt
       properties:
-        id:
+        entryId:
           type: string
           format: uuid
           description: ID of DailyEntry in UUID
