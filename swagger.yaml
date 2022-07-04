@@ -81,6 +81,12 @@ paths:
           schema:
             type: string
             format: date
+        - name: vacation
+          required: false
+          in: query
+          description: Filter vacations
+          schema:
+            type: boolean
       responses:
         "200":
           description: List of daily entries.
@@ -358,6 +364,7 @@ components:
         - expected
         - balance
         - date
+        - isVacation
       properties:
         person:
           type: integer
@@ -387,6 +394,9 @@ components:
           type: string
           format: date
           description: Date of time entry
+        isVacation:
+          type: boolean
+          description: Is daily entry vacation or not
 
     PersonTotalTime:
       type: object
