@@ -126,6 +126,12 @@ paths:
           schema:
             type: string
             format: date
+        - name: vacation
+          required: false
+          in: query
+          description: Filter vacations
+          schema:
+            type: boolean
       responses:
         "200":
           description: List of time entries.
@@ -431,6 +437,7 @@ components:
         - date
         - createdAt
         - updatedAt
+        - isVacation
       properties:
         id:
           type: string
@@ -464,3 +471,6 @@ components:
           type: string
           format: date-time
           description: Date time of time entry update
+        isVacation:
+          type: boolean
+          description: Is time entry vacation or not
