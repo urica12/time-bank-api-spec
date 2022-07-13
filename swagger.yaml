@@ -303,6 +303,7 @@ components:
         - active
         - unspentVacations
         - spentVacations
+        - minimumBillableRate
       properties:
         id:
           type: integer
@@ -362,6 +363,10 @@ components:
           type: integer
           format: int32
           description: Amount of spent vacations from last year.
+        minimumBillableRate:
+          type: integer
+          format: int32
+          description: Persons minimum billable rate
 
     DailyEntry:
       type: object
