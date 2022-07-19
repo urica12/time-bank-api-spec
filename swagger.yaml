@@ -67,6 +67,13 @@ paths:
           schema:
             type: integer
             format: int32
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Person'
+
       responses:
         "200":
           description: Updated Person information.
