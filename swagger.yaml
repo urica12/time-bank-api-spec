@@ -316,7 +316,7 @@ components:
       type: string
       description: Enum for timespan
       enum: 
-        - ALL TIME
+        - ALL_TIME
         - YEAR
         - MONTH
         - WEEK
