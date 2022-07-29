@@ -491,7 +491,6 @@ components:
       description: Person's single time entry
       required:
         - entryId
-        - forecastId
         - person
         - internalTime
         - projectTime
@@ -500,13 +499,14 @@ components:
         - updatedAt
         - isVacation
       properties:
-        id:
+        entryId:
           type: string
           format: uuid
           description: ID of DailyEntry in UUID
         forecastId:
           type: integer
           format: int32
+          nullable: true
           description: TimeEntry ID in Forecast
         person:
           type: integer
