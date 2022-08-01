@@ -413,6 +413,7 @@ components:
         - billableProjectTime
         - nonBillableProjectTime
         - logged
+        - loggedProjectTime
         - expected
         - balance
         - date
@@ -425,31 +426,35 @@ components:
         internalTime:
           type: integer
           format: int32
-          description: Amount of internal time per time entry
+          description: Amount of internal time per daily entry
         billableProjectTime:
           type: integer
           format: int32
-          description: Amount of billable project time per time entry
+          description: Amount of billable project time per daily entry
         nonBillableProjectTime:
           type: integer
           format: int32
-          description: Amount of non billable project time per time entry
+          description: Amount of non billable project time per daily entry
         logged:
           type: integer
           format: int32
-          description: Amount of time logged per time entry
+          description: Amount of time logged per daily entry
+        loggedProjectTime:
+          type: integer
+          format: int32
+          description: Amount of project time logged per daily entry
         expected:
           type: integer
           format: int32
-          description: Amount of time expected per time entry
+          description: Amount of time expected per daily entry
         balance:
           type: integer
           format: int32
-          description: Total amount of worktime per time entry
+          description: Total amount of worktime per daily entry
         date:
           type: string
           format: date
-          description: Date of time entry
+          description: Date of daily entry
         isVacation:
           type: boolean
           description: Is daily entry vacation or not
@@ -460,6 +465,7 @@ components:
       required:
         - balance
         - logged
+        - loggedProjectTime
         - expected
         - internalTime
         - billableProjectTime
@@ -476,6 +482,10 @@ components:
           type: integer
           format: int32
           description: Total amount logged time of person.
+        loggedProjectTime:
+          type: integer
+          format: int32
+          description: Total amount of project time logged of person.
         expected:
           type: integer
           format: int32
