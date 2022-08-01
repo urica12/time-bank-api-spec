@@ -410,7 +410,8 @@ components:
       required:
         - person
         - internalTime
-        - projectTime
+        - billableProjectTime
+        - nonBillableProjectTime
         - logged
         - expected
         - balance
@@ -425,10 +426,14 @@ components:
           type: integer
           format: int32
           description: Amount of internal time per time entry
-        projectTime:
+        billableProjectTime:
           type: integer
           format: int32
-          description: Amount of project time per time entry
+          description: Amount of billable project time per time entry
+        nonBillableProjectTime:
+          type: integer
+          format: int32
+          description: Amount of non billable project time per time entry
         logged:
           type: integer
           format: int32
@@ -457,7 +462,8 @@ components:
         - logged
         - expected
         - internalTime
-        - projectTime
+        - billableProjectTime
+        - nonBillableProjectTime
       properties:
         personId:
           type: integer
@@ -478,10 +484,14 @@ components:
           type: integer
           format: int32
           description: Total amount of internal time of person.
-        projectTime:
+        billableProjectTime:
           type: integer
           format: int32
-          description: Total amount of project time of person.
+          description: Total amount of billable project time of person.
+        nonBillableProjectTime:
+          type: integer
+          format: int32
+          description: Total amount of non billable project time of person.
         timePeriod:
           type: string
           description: String identifying the relevant year/month/week for the requested period of time total.
@@ -493,7 +503,8 @@ components:
         - entryId
         - person
         - internalTime
-        - projectTime
+        - billableProjectTime
+        - nonBillableProjectTime
         - date
         - createdAt
         - updatedAt
@@ -516,10 +527,14 @@ components:
           type: integer
           format: int32
           description: Amount of internal time per time entry
-        projectTime:
+        billableProjectTime:
           type: integer
           format: int32
-          description: Amount of project time per time entry
+          description: Amount of billable project time per time entry
+        nonBillableProjectTime:
+          type: integer
+          format: int32
+          description: Amount of non billable project time per time entry
         date:
           type: string
           format: date
