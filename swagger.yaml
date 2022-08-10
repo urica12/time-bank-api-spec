@@ -190,7 +190,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /v1/timeEntries/{entryId}:
+  /v1/timeEntries/{id}:
     delete:
       operationId: deleteTimeEntry
       summary: Delete a time entry.
@@ -198,7 +198,7 @@ paths:
       tags:
         - TimeEntries
       parameters:
-        - name: entryId
+        - name: id
           required: true
           in: path
           description: TimeEntry id
@@ -510,7 +510,7 @@ components:
       type: object
       description: Person's single time entry
       required:
-        - entryId
+        - id
         - person
         - internalTime
         - billableProjectTime
@@ -520,7 +520,7 @@ components:
         - updatedAt
         - isVacation
       properties:
-        entryId:
+        id:
           type: string
           format: uuid
           description: ID of DailyEntry in UUID
