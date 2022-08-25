@@ -410,6 +410,7 @@ components:
       required:
         - person
         - internalTime
+        - miscTime
         - billableProjectTime
         - nonBillableProjectTime
         - logged
@@ -427,6 +428,10 @@ components:
           type: integer
           format: int32
           description: Amount of internal time per daily entry
+        miscTime:
+          type: integer
+          format: int32
+          description: Amount of misc time per daily entry
         billableProjectTime:
           type: integer
           format: int32
@@ -468,6 +473,7 @@ components:
         - loggedProjectTime
         - expected
         - internalTime
+        - miscTime
         - billableProjectTime
         - nonBillableProjectTime
       properties:
@@ -494,6 +500,10 @@ components:
           type: integer
           format: int32
           description: Total amount of internal time of person.
+        miscTime:
+          type: integer
+          format: int32
+          description: Total amount of misc time of person.
         billableProjectTime:
           type: integer
           format: int32
@@ -513,6 +523,7 @@ components:
         - id
         - person
         - internalTime
+        - miscTime
         - billableProjectTime
         - nonBillableProjectTime
         - date
@@ -537,6 +548,10 @@ components:
           type: integer
           format: int32
           description: Amount of internal time per time entry
+        miscTime:
+          type: integer
+          format: int32
+          description: Amount of misc time per time entry
         billableProjectTime:
           type: integer
           format: int32
