@@ -6,14 +6,14 @@ info:
 
 security:
   - bearerAuth: []
-  
+
 paths:
   /v1/system/ping:
     get:
       operationId: ping
       summary: Replies with pong
       description: Replies ping with pong
-      tags: 
+      tags:
         - System
       responses:
         "200":
@@ -22,13 +22,13 @@ paths:
             text/plain:
               schema:
                 type: string
-                
+
   /v1/persons:
     get:
       operationId: listPersons
       summary: Get list of Timebank persons.
       description: Get list of Timebank persons.
-      tags: 
+      tags:
         - Persons
       parameters:
         - name: active
@@ -51,7 +51,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  
+
   /v1/persons/{personId}:
     put:
       operationId: updatePerson
@@ -80,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                  $ref: '#/components/schemas/Person'
+                $ref: '#/components/schemas/Person'
         "default":
           description: Invalid request was sent to the server.
           content:
@@ -246,7 +246,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        
+
   /v1/persons/{personId}/total:
     get:
       operationId: listPersonTotalTime
@@ -267,6 +267,20 @@ paths:
           description: Default value is ALL_TIME.
           schema:
             $ref: "#/components/schemas/Timespan"
+        - name: before
+          required: false
+          in: query
+          description: Last day that timeEntrys will be included format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
+        - name: after
+          required: false
+          in: query
+          description: First day that timeEntrys will be included format yyyy-mm-dd
+          schema:
+            type: string
+            format: date
       responses:
         "200":
           description: |-
@@ -294,7 +308,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      
+
   schemas:
 
     Error:
@@ -311,16 +325,16 @@ components:
         message:
           type: string
           description: Error message
-          
+
     Timespan:
       type: string
       description: Enum for timespan
-      enum: 
+      enum:
         - ALL_TIME
         - YEAR
         - MONTH
         - WEEK
-          
+
     Person:
       type: object
       description: Person Data from Forecast API
