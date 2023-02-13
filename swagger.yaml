@@ -270,14 +270,14 @@ paths:
         - name: before
           required: false
           in: query
-          description: Last day that timeEntrys will be included format yyyy-mm-dd
+          description: Retrieve time entries before given date.
           schema:
             type: string
             format: date
         - name: after
           required: false
           in: query
-          description: First day that timeEntrys will be included format yyyy-mm-dd
+          description: Retrieve time entries after given date.
           schema:
             type: string
             format: date
